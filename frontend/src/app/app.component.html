@@ -1,0 +1,88 @@
+<div class="container py-5">
+
+  <!-- LOGIN & REGISTER SECTION -->
+  <div *ngIf="!loggedIn" class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm rounded-4 p-4">
+        <h2 class="text-center mb-4">{{ registerMode ? 'Register' : 'Login' }}</h2>
+
+        <!-- LOGIN FORM -->
+        <form *ngIf="!registerMode" (ngSubmit)="login()">
+          <div class="mb-3">
+            <input type="text" class="form-control" [(ngModel)]="credentials.username" name="username"
+              placeholder="Username" required />
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" [(ngModel)]="credentials.password" name="password"
+              placeholder="Password" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form *ngIf="registerMode" (ngSubmit)="register()">
+          <div class="mb-3">
+            <input type="text" class="form-control" [(ngModel)]="registerCredentials.username" name="registerUsername"
+              placeholder="Username" required />
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" [(ngModel)]="registerCredentials.password"
+              name="registerPassword" placeholder="Password" required />
+          </div>
+          <button type="submit" class="btn btn-success w-100">Register</button>
+        </form>
+
+        <div class="text-center mt-3">
+          <button (click)="registerMode = !registerMode" class="btn btn-outline-secondary btn-sm">
+            {{ registerMode ? 'Switch to Login' : 'Switch to Register' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP SECTION -->
+  <div *ngIf="loggedIn">
+    <h2 class="mb-3">{{ title }} 📇</h2>
+
+    <div class="mb-4">
+      <h5>Live Clock</h5>
+      <p class="text-muted">The time is: {{ currentTime }}</p>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <form (ngSubmit)="editMode ? updateContact() : addContact()" class="mb-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newContact.name" name="name"
+            required />
+        </div>
+        <div class="col-md-4">
+          <input type="tel" class="form-control" placeholder="Phone" [(ngModel)]="newContact.phone" name="phone"
+            required />
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary w-100">
+            {{ editMode ? 'Update' : 'Add' }}
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- CONTACT LIST -->
+    <ul class="list-group mb-4">
+      <li *ngFor="let contact of contacts" class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ contact.name }}</strong><br />
+          <small class="text-muted">{{ contact.phone }}</small>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-secondary me-2" (click)="startEdit(contact)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteContact(contact.id)">Delete</button>
+        </div>
+      </li>
+    </ul>
+
+    <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
+  </div>
+</div>
