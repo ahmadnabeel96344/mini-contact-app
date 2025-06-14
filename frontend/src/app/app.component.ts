@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 // import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -36,7 +37,7 @@ export class AppComponent {
   constructor(private http: HttpClient) { }
 
   login() {
-    this.http.post<{ token: string }>('http://localhost:3000/api/login', this.credentials)
+    this.http.post<{ token: string }>(`${environment.apiBaseUrl}/login`, this.credentials)
       .subscribe({
         next: (response) => {
           sessionStorage.setItem('token', response.token);
@@ -55,7 +56,7 @@ export class AppComponent {
   }
 
   register() {
-    this.http.post<{ message: string }>('http://localhost:3000/api/register', this.registerCredentials)
+    this.http.post<{ message: string }>(`${environment.apiBaseUrl}/register`, this.registerCredentials)
       .subscribe({
         next: () => {
           alert('Registration successful! Please log in.');
@@ -101,14 +102,14 @@ export class AppComponent {
 
   fetchContacts() {
     this.http
-      .get<{ id: number; name: string; phone: string }[]>('http://localhost:3000/api/contacts', this.getAuthHeaders())
+      .get<{ id: number; name: string; phone: string }[]>(`${environment.apiBaseUrl}/contacts`, this.getAuthHeaders())
       .subscribe((data) => this.contacts = data);
   }
 
   addContact() {
     if (this.newContact.name.trim() && this.newContact.phone.trim()) {
       this.http
-        .post<{ id: number; name: string; phone: string }>('http://localhost:3000/api/contacts/create', this.newContact, this.getAuthHeaders())
+        .post<{ id: number; name: string; phone: string }>(`${environment.apiBaseUrl}/contacts/create`, this.newContact, this.getAuthHeaders())
         .subscribe((contact) => {
           this.contacts.push(contact);
           this.newContact.name = '';
@@ -127,7 +128,7 @@ export class AppComponent {
     if (this.editContactId !== null) {
       this.http
         .put<{ id: number; name: string; phone: string }>(
-          `http://localhost:3000/api/contacts/update/${this.editContactId}`,
+          `${environment.apiBaseUrl}/contacts/update/${this.editContactId}`,
           this.newContact,
           this.getAuthHeaders()
         )
@@ -145,7 +146,7 @@ export class AppComponent {
 
   deleteContact(id: number) {
     this.http
-      .delete(`http://localhost:3000/api/contacts/delete/${id}`, this.getAuthHeaders())
+      .delete(`${environment.apiBaseUrl}/contacts/delete/${id}`, this.getAuthHeaders())
       .subscribe(() => {
         this.contacts = this.contacts.filter(contact => contact.id !== id);
       });
