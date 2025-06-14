@@ -42,7 +42,7 @@ export class AppComponent {
         next: (response) => {
           sessionStorage.setItem('token', response.token);
           this.loggedIn = true;
-
+          this.credentials = { username: '', password: '' };
           this.fetchContacts();
           this.startClock();
         },
@@ -60,6 +60,7 @@ export class AppComponent {
       .subscribe({
         next: () => {
           alert('Registration successful! Please log in.');
+          this.registerCredentials = { username: '', password: '' };          
           this.registerMode = false;
         },
         error: () => alert('Registration failed.')
