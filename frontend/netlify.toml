@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist/frontend"  # replace 'frontend' with your actual project name
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[dev]
+  command = "ng serve"
