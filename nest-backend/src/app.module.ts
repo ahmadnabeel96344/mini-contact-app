@@ -6,16 +6,18 @@ import { ContactsModule } from './contacts/contacts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './auth/user.entity';
 import { Contact } from './contacts/contact.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'contact_app',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '3306'),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
       entities: [User, Contact],
       synchronize: true, // Disable in production
     }),
